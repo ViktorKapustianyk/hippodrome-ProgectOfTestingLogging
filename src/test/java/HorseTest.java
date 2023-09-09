@@ -30,7 +30,111 @@ class HorseTest {
     }
 
     @Test
-    @DisplayName("Check the first parameter in the constructor")
+    @DisplayName("Check first parameter is null")
+    void checkNameIsNull() {
+        String name = null;
+        Throwable actualException = assertThrows(
+                IllegalArgumentException.class,
+                () -> {
+                    new Horse(name, 1);
+                }
+        );
+        assertEquals(IllegalArgumentException.class, actualException.getClass());
+    }
+
+    @Test
+    @DisplayName("Check message if parameter is null")
+    void checkMessageFromException() {
+        String name = null;
+        Throwable actualException = assertThrows(
+                IllegalArgumentException.class,
+                () -> {
+                    new Horse(name, 1);
+                }
+        );
+        assertEquals("Name cannot be null.", actualException.getMessage());
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {" ", "\t", ""})
+    @DisplayName("Check Exception if first parameter is empty string")
+    void checkEmptyString(String name) {
+        Throwable actualException = assertThrows(
+                IllegalArgumentException.class,
+                () -> {
+                    new Horse(name, 1);
+                }
+        );
+        assertEquals(IllegalArgumentException.class, actualException.getClass());
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {" ", "\t", ""})
+    @DisplayName("Check Message if first parameter is empty string")
+    void checkMessageEmptyString(String name) {
+        Throwable actualException = assertThrows(
+                IllegalArgumentException.class,
+                () -> {
+                    new Horse(name, 1);
+                }
+        );
+        assertEquals("Name cannot be blank.", actualException.getMessage());
+    }
+
+    @Test
+    @DisplayName("Check Exception if second parameter is negative")
+    void checkExceptionNegativeSecondParameter() {
+        double speed = -1.5;
+        Throwable actualException = assertThrows(
+                IllegalArgumentException.class,
+                () -> {
+                    new Horse("name", speed);
+                }
+        );
+        assertEquals(IllegalArgumentException.class, actualException.getClass());
+    }
+
+    @Test
+    @DisplayName("Check Message if second parameter is negative")
+    void checkMessageNegativeSecondParameter() {
+        double speed = -1.5;
+        Throwable actualException = assertThrows(
+                IllegalArgumentException.class,
+                () -> {
+                    new Horse("name", speed);
+                }
+        );
+        assertEquals("Speed cannot be negative.", actualException.getMessage());
+    }
+
+    @Test
+    @DisplayName("Check Exception if third parameter is negative")
+    void checkExceptionNegativeThirdParameter() {
+        double distance = -1.5;
+        Throwable actualException = assertThrows(
+                IllegalArgumentException.class,
+                () -> {
+                    new Horse("name", 1, distance);
+                }
+        );
+        assertEquals(IllegalArgumentException.class, actualException.getClass());
+    }
+
+    @Test
+    @DisplayName("Check Message if third parameter is negative")
+    void checkMessageNegativeThirdParameter() {
+        double distance = -1.5;
+        Throwable actualException = assertThrows(
+                IllegalArgumentException.class,
+                () -> {
+                    new Horse("name", 1, distance);
+                }
+        );
+        assertEquals("Distance cannot be negative.", actualException.getMessage());
+    }
+
+    @Test
+    @DisplayName("Check first parameter in constructor")
     void getName() {
         String expectedName = "name";
         String actual = horseWithTwoParams.getName();
@@ -38,7 +142,7 @@ class HorseTest {
     }
 
     @Test
-    @DisplayName("Check the second parameter in the constructor")
+    @DisplayName("Check second parameter in constructor")
     void getSpeed() {
         double expectedSpeed = 1.5;
         double actual = horseWithTwoParams.getSpeed();
@@ -46,7 +150,7 @@ class HorseTest {
     }
 
     @Test
-    @DisplayName("Check the third parameter in ThreeParams constructor")
+    @DisplayName("Check third parameter in ThreeParams constructor")
     void testGetDistanceWithThreeParameters() {
         double expectedDistance = 21.5;
         double actualDistance = horseWithThreeParams.getDistance();
@@ -54,7 +158,7 @@ class HorseTest {
     }
 
     @Test
-    @DisplayName("Check the third parameter in TwoParams constructor")
+    @DisplayName("Check third parameter in TwoParams constructor")
     void testGetDistanceWithTwoParameters() {
         double expectedDistance = 0.0;
         double actualDistance = horseWithTwoParams.getDistance();
@@ -62,7 +166,7 @@ class HorseTest {
     }
 
     @Test
-    @DisplayName("Check method getRandomDouble inside move method with parameters 0.2 and 0.9")
+    @DisplayName("Check method getRandomDouble inside move method")
     void testGetRandomDoubleInsideMove() {
         double min = 0.2;
         double max = 0.9;
@@ -74,7 +178,7 @@ class HorseTest {
     }
     @ParameterizedTest
     @CsvSource({"1.0, 3.0, 2.5"})
-    @DisplayName("Check that the method assigns distance a correct value")
+    @DisplayName("Check method assigns distance correct value")
     void testValueDistance(double distance, double speed, double expectedDistance) {
         double min = 0.2;
         double max = 0.9;
