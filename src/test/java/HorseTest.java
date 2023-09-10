@@ -1,4 +1,3 @@
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -23,10 +22,6 @@ class HorseTest {
 
         horseWithThreeParams = new Horse(expectedName, expectedSpeed, expectedDistance);
         horseWithTwoParams = new Horse(expectedName, expectedSpeed);
-    }
-
-    @AfterEach
-    void tearDown() {
     }
 
     @Test
@@ -177,14 +172,15 @@ class HorseTest {
         }
     }
     @ParameterizedTest
-    @CsvSource({"1.0, 3.0, 2.5"})
+    @CsvSource({"0.5, 2","1.0, 3.0"})
     @DisplayName("Check method assigns distance correct value")
-    void testValueDistance(double distance, double speed, double expectedDistance) {
+    void testValueDistance(double mockedRandomValue, double expectedDistance) {
         double min = 0.2;
         double max = 0.9;
+        double distance = 1;
+        double speed = 2;
 
         try (MockedStatic<Horse> mathMockedStatic = Mockito.mockStatic(Horse.class)) {
-            double mockedRandomValue = 0.5;
             mathMockedStatic.when(() -> Horse.getRandomDouble(min, max)).thenReturn(mockedRandomValue);
 
             Horse horse = new Horse("name", speed, distance);
