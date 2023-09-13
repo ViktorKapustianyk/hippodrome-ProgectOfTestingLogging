@@ -1,4 +1,4 @@
-import org.junit.jupiter.api.BeforeEach;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -13,7 +13,7 @@ import static org.mockito.Mockito.times;
 class HippodromeTest {
     @Test
     @DisplayName("Check if parameter is null")
-    void checkIsNull() {
+    void constructor_NullListParamPassed_ThrowIllegalArgumentException() {
         Throwable actualException = assertThrows(
                 IllegalArgumentException.class,
                 () -> {
@@ -25,7 +25,7 @@ class HippodromeTest {
 
     @Test
     @DisplayName("Check Message parameter is null")
-    void checkMessageParameterIsNull() {
+    void constructor_NullListParamPassed_Message() {
         Throwable actualException = assertThrows(
                 IllegalArgumentException.class,
                 () -> {
@@ -37,7 +37,7 @@ class HippodromeTest {
 
     @Test
     @DisplayName("Check if parameter is empty list")
-    void checkIsEmptyList() {
+    void constructor_EmptyListParamPassed_ThrowIllegalArgumentException() {
         Throwable actualException = assertThrows(
                 IllegalArgumentException.class,
                 () -> {
@@ -49,7 +49,7 @@ class HippodromeTest {
 
     @Test
     @DisplayName("Check Message if parameter is empty list")
-    void checkMessageIsEmptyList() {
+    void constructor_EmptyListParamPassed_Message() {
         Throwable actualException = assertThrows(
                 IllegalArgumentException.class,
                 () -> {
@@ -61,7 +61,7 @@ class HippodromeTest {
 
     @Test
     @DisplayName("Verify list contains same objects & same order.")
-    void getHorses() {
+    void getHorses_ReturnsListHorsesInOrder() {
         List<Horse> exceptedHorses = new ArrayList<>();
         for (int i = 0; i < 30; i++) {
             exceptedHorses.add(i, new Horse("Name" + i , i));
@@ -69,12 +69,17 @@ class HippodromeTest {
         Hippodrome hippodrome = new Hippodrome(exceptedHorses);
         List<Horse> actualHorses = hippodrome.getHorses();
 
+        assertNotNull(hippodrome.getHorses());
+
+        assertEquals(30, hippodrome.getHorses().size());
+
+        assertEquals(exceptedHorses.get(1).getName(), actualHorses.get(1).getName());
         assertIterableEquals(exceptedHorses, actualHorses);
     }
 
     @Test
     @DisplayName("Check method move calls on all horses.")
-    void move() {
+    void move_CallSMoveMethodForAllHorses() {
         List<Horse> mockedHorses = new ArrayList<>();
         for (int i = 0; i < 50; i++) {
             Horse horseMock = Mockito.mock(Horse.class);
@@ -90,7 +95,7 @@ class HippodromeTest {
 
     @Test
     @DisplayName("Verify method returns largest distance value.")
-    void getWinner() {
+    void getWinner_ReturnsCorrectWinner() {
         List<Horse> horses = new ArrayList<>();
         Horse horse1 = new Horse("First", 3);
         Horse horse2 = new Horse("Second", 2);

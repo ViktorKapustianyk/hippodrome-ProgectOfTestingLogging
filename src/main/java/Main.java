@@ -20,7 +20,7 @@ public class Main {
         );
 
         Hippodrome hippodrome = new Hippodrome(horses);
-        LOGGER.info("Start of jumps. Number of participants: " + horses.size());
+        LOGGER.info("Start of jumps. Number of participants: {}" , horses.size());
 
         for (int i = 0; i < 100; i++) {
             hippodrome.move();
@@ -31,7 +31,7 @@ public class Main {
         String winnerName = hippodrome.getWinner().getName();
         System.out.println(winnerName + " wins!");
 
-        LOGGER.info("End of jumps. Winner: " + winnerName);
+        LOGGER.info("End of jumps. Winner: {}" , winnerName);
     }
 
     private static void watch(Hippodrome hippodrome) throws Exception {
