@@ -26,12 +26,13 @@ class HorseTest {
 
     @Test
     @DisplayName("Check first parameter is null")
-    void checkNameIsNull() {
+    void constructor_NullNameParamPassed_ThrowIllegalArgumentException() {
         String name = null;
+        double speed = 1;
         Throwable actualException = assertThrows(
                 IllegalArgumentException.class,
                 () -> {
-                    new Horse(name, 1);
+                    new Horse(name, speed);
                 }
         );
         assertEquals(IllegalArgumentException.class, actualException.getClass());
@@ -39,38 +40,41 @@ class HorseTest {
 
     @Test
     @DisplayName("Check message if parameter is null")
-    void checkMessageFromException() {
+    void constructor_NullNameParamPassed_Message() {
         String name = null;
+        double speed = 1;
         Throwable actualException = assertThrows(
                 IllegalArgumentException.class,
                 () -> {
-                    new Horse(name, 1);
+                    new Horse(name, speed);
                 }
         );
         assertEquals("Name cannot be null.", actualException.getMessage());
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {" ", "\t", ""})
+    @ValueSource(strings = {" ", "  ", "\n", "\n\n", "\t", "\t \t"})
     @DisplayName("Check Exception if first parameter is empty string")
-    void checkEmptyString(String name) {
+    void constructor_EmptyNameParamPassed_ThrowIllegalArgumentException(String name) {
+        double speed = 1;
         Throwable actualException = assertThrows(
                 IllegalArgumentException.class,
                 () -> {
-                    new Horse(name, 1);
+                    new Horse(name, speed);
                 }
         );
         assertEquals(IllegalArgumentException.class, actualException.getClass());
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {" ", "\t", ""})
+    @ValueSource(strings = {" ", "  ", "\n", "\n\n", "\t", "\t \t"})
     @DisplayName("Check Message if first parameter is empty string")
-    void checkMessageEmptyString(String name) {
+    void constructor_EmptyNameParamPassed_Message(String name) {
+        double speed = 1;
         Throwable actualException = assertThrows(
                 IllegalArgumentException.class,
                 () -> {
-                    new Horse(name, 1);
+                    new Horse(name, speed);
                 }
         );
         assertEquals("Name cannot be blank.", actualException.getMessage());
@@ -78,12 +82,13 @@ class HorseTest {
 
     @Test
     @DisplayName("Check Exception if second parameter is negative")
-    void checkExceptionNegativeSecondParameter() {
+    void constructor_NegativeSpeedParamPassed_ThrowIllegalArgumentException() {
+        String name = "name";
         double speed = -1.5;
         Throwable actualException = assertThrows(
                 IllegalArgumentException.class,
                 () -> {
-                    new Horse("name", speed);
+                    new Horse(name, speed);
                 }
         );
         assertEquals(IllegalArgumentException.class, actualException.getClass());
@@ -91,12 +96,13 @@ class HorseTest {
 
     @Test
     @DisplayName("Check Message if second parameter is negative")
-    void checkMessageNegativeSecondParameter() {
+    void constructor_NegativeSpeedParamPassed_Message() {
+        String name = "name";
         double speed = -1.5;
         Throwable actualException = assertThrows(
                 IllegalArgumentException.class,
                 () -> {
-                    new Horse("name", speed);
+                    new Horse(name, speed);
                 }
         );
         assertEquals("Speed cannot be negative.", actualException.getMessage());
@@ -104,12 +110,14 @@ class HorseTest {
 
     @Test
     @DisplayName("Check Exception if third parameter is negative")
-    void checkExceptionNegativeThirdParameter() {
+    void constructor_NegativeDistanceParamPassed_ThrowIllegalArgumentException() {
+        String name = "name";
+        double speed = 1.5;
         double distance = -1.5;
         Throwable actualException = assertThrows(
                 IllegalArgumentException.class,
                 () -> {
-                    new Horse("name", 1, distance);
+                    new Horse(name, speed, distance);
                 }
         );
         assertEquals(IllegalArgumentException.class, actualException.getClass());
@@ -117,12 +125,14 @@ class HorseTest {
 
     @Test
     @DisplayName("Check Message if third parameter is negative")
-    void checkMessageNegativeThirdParameter() {
+    void constructor_NegativeDistanceParamPassed_Message() {
+        String name = "name";
+        double speed = 1.5;
         double distance = -1.5;
         Throwable actualException = assertThrows(
                 IllegalArgumentException.class,
                 () -> {
-                    new Horse("name", 1, distance);
+                    new Horse(name, speed, distance);
                 }
         );
         assertEquals("Distance cannot be negative.", actualException.getMessage());
@@ -130,7 +140,7 @@ class HorseTest {
 
     @Test
     @DisplayName("Check first parameter in constructor")
-    void getName() {
+    void getName_ReturnsCorrectName() {
         String expectedName = "name";
         String actual = horseWithTwoParams.getName();
         assertEquals(expectedName, actual, "The return value is not a String");
@@ -138,7 +148,7 @@ class HorseTest {
 
     @Test
     @DisplayName("Check second parameter in constructor")
-    void getSpeed() {
+    void getSpeed_ReturnsCorrectSpeed() {
         double expectedSpeed = 1.5;
         double actual = horseWithTwoParams.getSpeed();
         assertEquals(expectedSpeed, actual, "The return value is not the expected speed");
@@ -146,7 +156,7 @@ class HorseTest {
 
     @Test
     @DisplayName("Check third parameter in ThreeParams constructor")
-    void testGetDistanceWithThreeParameters() {
+    void getDistance_ReturnsCorrectDistance_ThreeParameters() {
         double expectedDistance = 21.5;
         double actualDistance = horseWithThreeParams.getDistance();
         assertEquals(expectedDistance, actualDistance, "The return value is not the expected distance");
@@ -154,7 +164,7 @@ class HorseTest {
 
     @Test
     @DisplayName("Check third parameter in TwoParams constructor")
-    void testGetDistanceWithTwoParameters() {
+    void getDistance_ReturnsCorrectDistance_TwoParameters() {
         double expectedDistance = 0.0;
         double actualDistance = horseWithTwoParams.getDistance();
         assertEquals(expectedDistance, actualDistance, "The return value is not zero");
@@ -162,7 +172,7 @@ class HorseTest {
 
     @Test
     @DisplayName("Check method getRandomDouble inside move method")
-    void testGetRandomDoubleInsideMove() {
+    void move_CallsRandomDoubleMethodWithCorrectParams() {
         double min = 0.2;
         double max = 0.9;
 
@@ -174,16 +184,17 @@ class HorseTest {
     @ParameterizedTest
     @CsvSource({"0.5, 2","1.0, 3.0"})
     @DisplayName("Check method assigns distance correct value")
-    void testValueDistance(double mockedRandomValue, double expectedDistance) {
+    void move_CalculatesValueDistanceUsingRandomDouble(double mockedRandomValue, double expectedDistance) {
         double min = 0.2;
         double max = 0.9;
         double distance = 1;
         double speed = 2;
+        String name = "name";
 
         try (MockedStatic<Horse> mathMockedStatic = Mockito.mockStatic(Horse.class)) {
             mathMockedStatic.when(() -> Horse.getRandomDouble(min, max)).thenReturn(mockedRandomValue);
 
-            Horse horse = new Horse("name", speed, distance);
+            Horse horse = new Horse(name, speed, distance);
             horse.move();
 
             double actualDistance = horse.getDistance();
